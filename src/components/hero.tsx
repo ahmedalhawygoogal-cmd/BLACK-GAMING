@@ -14,8 +14,8 @@ export function Hero() {
     <section id="home" className="relative isolate overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-grid" />
-        <div className="absolute -top-48 right-1/2 h-[440px] w-[720px] translate-x-1/2 rounded-full bg-accent-purple/[0.13] blur-[140px]" />
-        <div className="absolute -top-24 left-[-12%] h-[340px] w-[460px] rounded-full bg-accent-cyan/[0.07] blur-[130px]" />
+        <div className="hidden sm:block absolute -top-48 right-1/2 h-[440px] w-[720px] translate-x-1/2 rounded-full bg-accent-purple/[0.13] blur-[120px]" />
+        <div className="hidden sm:block absolute -top-24 left-[-12%] h-[340px] w-[460px] rounded-full bg-accent-cyan/[0.07] blur-[100px]" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </div>
 

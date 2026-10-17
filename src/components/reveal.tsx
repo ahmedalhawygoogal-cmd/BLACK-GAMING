@@ -1,6 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
 type RevealProps = {
@@ -9,22 +6,7 @@ type RevealProps = {
   delay?: number;
 };
 
-export function Reveal({ children, className, delay = 0 }: RevealProps) {
-  const shouldReduceMotion = useReducedMotion();
-
-  return (
-    <motion.div
-      className={className}
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-64px" }}
-      transition={{
-        duration: 0.55,
-        delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
-      {children}
-    </motion.div>
-  );
+// Zero-overhead server component wrapper replacing framer-motion scroll listeners
+export function Reveal({ children, className }: RevealProps) {
+  return <div className={className}>{children}</div>;
 }

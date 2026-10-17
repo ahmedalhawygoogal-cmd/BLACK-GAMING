@@ -16,7 +16,7 @@ export function Games() {
   const goldPackages = BLOOD_STRIKE_PRODUCTS.filter((p) => p.category === "gold").slice(0, 4);
 
   return (
-    <section id="games" className="relative py-20 sm:py-24">
+    <section id="games" className="relative py-16 sm:py-24">
       <div className="container-page">
         <Reveal>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -38,7 +38,7 @@ export function Games() {
 
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-400">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
                 الشحن متاح ونشط الآن
               </span>
             </div>
@@ -47,14 +47,14 @@ export function Games() {
 
         {/* Featured Blood Strike Hero Showcase Card */}
         <div className="mt-10">
-          <Reveal delay={0.08}>
-            <div className="relative overflow-hidden rounded-3xl border border-white/[0.12] bg-gradient-to-b from-[#141b2d] via-surface to-[#0b0f19] p-6 sm:p-8 lg:p-10 shadow-2xl">
-              {/* Atmospheric Glow */}
-              <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-accent-purple/20 blur-[100px]" />
-              <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-accent-cyan/15 blur-[100px]" />
+          <Reveal>
+            <div className="relative overflow-hidden rounded-3xl border border-white/[0.12] bg-gradient-to-b from-[#141b2d] via-surface to-[#0b0f19] p-6 sm:p-8 lg:p-10 shadow-xl transition-all duration-300 hover:border-white/20">
+              {/* Desktop-only Glows (hidden on mobile for instant rendering and smooth 60fps) */}
+              <div className="hidden sm:block pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-accent-purple/15 blur-[90px]" />
+              <div className="hidden sm:block pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-accent-cyan/10 blur-[90px]" />
 
               <div className="relative z-10 grid gap-8 lg:grid-cols-12 lg:items-center">
-                {/* Left/Main Column: Game Details */}
+                {/* Main Column: Game Details */}
                 <div className="lg:col-span-7">
                   <div className="flex flex-wrap items-center gap-2.5">
                     <span className="inline-flex items-center gap-1.5 rounded-lg border border-accent-purple/40 bg-accent-purple/15 px-3 py-1 text-xs font-bold text-accent-purple">
@@ -92,12 +92,12 @@ export function Games() {
                   <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     <Link
                       href="/game/blood-strike"
-                      className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-accent-purple to-[#7c4df2] px-8 text-sm font-bold text-white shadow-cta transition-all duration-200 hover:brightness-110"
+                      className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-accent-purple to-[#7c4df2] px-8 text-sm font-bold text-white shadow-cta transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
                     >
                       <span>شحن باقات Blood Strike الآن</span>
                       <ArrowLeft
                         size={17}
-                        className="transition-transform duration-300 group-hover:-translate-x-1"
+                        className="transition-transform duration-200 group-hover:-translate-x-1"
                       />
                     </Link>
 
@@ -111,9 +111,9 @@ export function Games() {
                   </div>
                 </div>
 
-                {/* Right Column: Mini Pricing Teaser Cards */}
+                {/* Right Column: Pricing Teaser (Solid background on mobile, no backdrop-blur) */}
                 <div className="lg:col-span-5">
-                  <div className="rounded-2xl border border-white/[0.08] bg-[#0c101b]/90 p-5 backdrop-blur-sm">
+                  <div className="rounded-2xl border border-white/[0.08] bg-[#0c101b] md:bg-[#0c101b]/90 md:backdrop-blur-sm p-5">
                     <div className="flex items-center justify-between border-b border-white/[0.06] pb-3 text-xs font-semibold text-white/60">
                       <span className="flex items-center gap-1.5 text-white/90">
                         <Sparkles size={14} className="text-accent-purple" />
