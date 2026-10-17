@@ -1,17 +1,18 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, MessageCircle, X, Zap } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "./logo";
+import { WHATSAPP_PHONE_NUMBER } from "@/lib/supabase";
 
 const navLinks = [
-  { label: "الرئيسية", href: "/#home" },
-  { label: "الألعاب", href: "/#games" },
+  { label: "الرئيسية", href: "/" },
+  { label: "شحن Blood Strike", href: "/game/blood-strike" },
   { label: "مميزاتنا", href: "/#features" },
-  { label: "الدعم الفني", href: "/#support" },
+  { label: "الدعم عبر واتساب", href: `https://wa.me/${WHATSAPP_PHONE_NUMBER}`, isExternal: true },
 ];
 
 export function Navbar() {
@@ -55,18 +56,30 @@ export function Navbar() {
         <nav aria-label="التنقل الرئيسي" className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = pathname === "/" && link.href === "/#home";
+              const isActive = pathname === link.href;
 
               return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className={`inline-flex h-9 items-center rounded-lg px-3.5 text-[13px] font-medium transition-colors duration-200 hover:bg-white/[0.04] hover:text-white ${
-                      isActive ? "text-white" : "text-white/55"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
+                <li key={link.label}>
+                  {link.isExternal ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-9 items-center gap-1.5 rounded-lg px-3.5 text-[13px] font-medium text-emerald-400 transition-colors duration-200 hover:bg-emerald-500/10 hover:text-emerald-300"
+                    >
+                      <MessageCircle size={14} />
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className={`inline-flex h-9 items-center rounded-lg px-3.5 text-[13px] font-medium transition-colors duration-200 hover:bg-white/[0.04] hover:text-white ${
+                        isActive ? "text-white bg-white/[0.06]" : "text-white/60"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               );
             })}
@@ -74,12 +87,13 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="hidden h-10 items-center justify-center rounded-lg bg-accent-purple px-5 text-[13px] font-semibold text-white shadow-cta transition-colors duration-200 hover:bg-[#7c4df2] sm:inline-flex"
+          <Link
+            href="/game/blood-strike"
+            className="hidden h-10 items-center justify-center gap-1.5 rounded-lg bg-accent-purple px-5 text-[13px] font-semibold text-white shadow-cta transition-colors duration-200 hover:bg-[#7c4df2] sm:inline-flex"
           >
-            تسجيل الدخول
-          </button>
+            <Zap size={15} />
+            <span>اشحن الآن</span>
+          </Link>
 
           <button
             type="button"
@@ -109,24 +123,39 @@ export function Navbar() {
               aria-label="قائمة التنقل للجوال"
               className="container-page flex flex-col gap-1 py-4"
             >
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-lg px-3 py-3 text-sm font-medium text-white/60 transition-colors hover:bg-white/[0.04] hover:text-white"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) =>
+                link.isExternal ? (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-500/10"
+                  >
+                    <MessageCircle size={16} />
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="rounded-lg px-3 py-3 text-sm font-medium text-white/60 transition-colors hover:bg-white/[0.04] hover:text-white"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
 
-              <button
-                type="button"
+              <Link
+                href="/game/blood-strike"
                 onClick={() => setIsOpen(false)}
-                className="mt-3 inline-flex h-11 items-center justify-center rounded-lg bg-accent-purple text-sm font-semibold text-white transition-colors hover:bg-[#7c4df2]"
+                className="mt-3 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-accent-purple text-sm font-semibold text-white transition-colors hover:bg-[#7c4df2]"
               >
-                تسجيل الدخول
-              </button>
+                <Zap size={16} />
+                <span>اشحن الآن (Blood Strike)</span>
+              </Link>
             </nav>
           </motion.div>
         ) : null}

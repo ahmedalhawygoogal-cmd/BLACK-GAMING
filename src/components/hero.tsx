@@ -50,21 +50,21 @@ export function Hero() {
           <Reveal delay={0.18}>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
-                href="/#games"
+                href="/game/blood-strike"
                 className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent-purple px-8 text-sm font-bold text-white shadow-cta transition-colors duration-200 hover:bg-[#7c4df2] sm:w-auto"
               >
-                تسوق الآن
+                <span>اشحن Blood Strike الآن</span>
                 <ArrowLeft
                   size={17}
                   className="transition-transform duration-300 ease-premium group-hover:-translate-x-1"
                 />
               </Link>
               <Link
-                href="/#features"
+                href="/#games"
                 className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/[0.09] bg-white/[0.02] px-8 text-sm font-semibold text-white/70 transition-colors duration-200 hover:border-white/15 hover:bg-white/[0.05] hover:text-white sm:w-auto"
               >
                 <Gamepad2 size={17} strokeWidth={1.8} />
-                استكشف الألعاب
+                باقات الجولد والباتل باس
               </Link>
             </div>
           </Reveal>

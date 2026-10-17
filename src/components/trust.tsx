@@ -10,25 +10,25 @@ type Feature = {
 
 const features: Feature[] = [
   {
-    title: "شحن فوري",
+    title: "شحن فوري بالـ ID",
     description:
-      "تُنفَّذ طلبات الشحن في ثوانٍ معدودة، وتصلك مباشرة إلى حسابك دون انتظار.",
+      "تُنفَّذ طلبات شحن Blood Strike في أقل من 5 دقائق إلى حسابك بالآيدي مباشرة دون الحاجة لكلمة المرور.",
     icon: Zap,
     iconClass: "border-accent-purple/20 bg-accent-purple/10 text-accent-purple",
   },
   {
-    title: "دعم 24/7",
+    title: "دعم واتساب مباشر",
     description:
-      "فريق دعم عربي متواجد على مدار الساعة لمساعدتك في أي استفسار أو مشكلة.",
+      "فريق خدمة عملاء متواجد على مدار الساعة عبر الواتساب (+201554893945) لمساعدتك وتأكيد تنفيذ طلبك.",
     icon: Headset,
-    iconClass: "border-accent-cyan/20 bg-accent-cyan/10 text-accent-cyan",
+    iconClass: "border-emerald-500/20 bg-emerald-500/10 text-emerald-400",
   },
   {
-    title: "دفع آمن",
+    title: "دفع آمن بالجنيه المصري",
     description:
-      "مدفوعات مشفّرة بالكامل عبر بوابات دفع موثوقة، مع حماية كاملة لبياناتك.",
+      "طرق دفع محلية مريحة تشمل فودافون كاش، إنستاباي InstaPay، وكافة المحافظ الإلكترونية مع ضمان كامل.",
     icon: ShieldCheck,
-    iconClass: "border-white/10 bg-white/[0.04] text-white/80",
+    iconClass: "border-accent-cyan/20 bg-accent-cyan/10 text-accent-cyan",
   },
 ];
 

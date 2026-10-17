@@ -1,0 +1,8 @@
+{
+  "name": "BLACK GAMING",
+  "description": "منصة عربية موثوقة لشحن الألعاب والبطاقات الرقمية بأسعار تنافسية، تسليم فوري، ودعم فني على مدار الساعة.",
+  "prompt": "BLACK GAMING - منصة شحن ألعاب وبطاقات رقمية",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
