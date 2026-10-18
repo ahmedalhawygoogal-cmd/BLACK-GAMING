@@ -1,10 +1,4 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import {
-  ADMIN_SESSION_COOKIE,
-  verifyAdminSessionToken,
-} from "@/lib/admin-session";
 import { AdminShell } from "./admin-shell";
 
 export const dynamic = "force-dynamic";
@@ -20,15 +14,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function AdminPanelLayout({
+export default function AdminPanelLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const token = cookies().get(ADMIN_SESSION_COOKIE)?.value;
-  if (!(await verifyAdminSessionToken(token))) {
-    redirect("/admin/login");
-  }
-
   return <AdminShell>{children}</AdminShell>;
 }
