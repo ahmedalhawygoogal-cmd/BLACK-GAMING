@@ -9,7 +9,7 @@ import {
   createAdminSessionToken,
 } from "@/lib/admin-session";
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "$YXg8sr?8&&Y?Bb";
+const ADMIN_PASSWORD = "$YXg8sr?8&&Y?Bb";
 
 export type LoginState = {
   error: string | null;

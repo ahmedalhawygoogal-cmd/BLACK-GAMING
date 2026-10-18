@@ -12,15 +12,13 @@ export async function middleware(request: NextRequest) {
   }
 
   const sessionToken = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  const isAuthenticated = await verifyAdminSessionToken(sessionToken);
-
-  if (!isAuthenticated) {
-    const loginUrl = new URL("/admin/login", request.url);
-    loginUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(loginUrl);
+  if (await verifyAdminSessionToken(sessionToken)) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  const loginUrl = new URL("/admin/login", request.url);
+  loginUrl.searchParams.set("next", pathname);
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {
