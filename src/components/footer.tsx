@@ -1,25 +1,9 @@
-import {
-  Instagram,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Phone,
-  Twitter,
-  Youtube,
-} from "lucide-react";
+import { MapPin, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "./logo";
 import { WHATSAPP_FORMATTED, WHATSAPP_PHONE_NUMBER } from "@/lib/supabase";
 
 const footerColumns = [
-  {
-    title: "المتجر",
-    links: [
-      { label: "شحن Blood Strike (MENA)", href: "/game/blood-strike" },
-      { label: "باقات الجولد (Gold)", href: "/game/blood-strike#pricing" },
-      { label: "شحن الباتل باس", href: "/game/blood-strike#pricing" },
-    ],
-  },
   {
     title: "المنصة",
     links: [
@@ -41,17 +25,9 @@ const footerColumns = [
   },
 ];
 
-const socialLinks = [
-  { label: "واتساب", href: `https://wa.me/${WHATSAPP_PHONE_NUMBER}`, icon: MessageCircle },
-  { label: "إنستغرام", href: "#", icon: Instagram },
-  { label: "إكس", href: "#", icon: Twitter },
-  { label: "يوتيوب", href: "#", icon: Youtube },
-];
-
 const policyLinks = [
-  { label: "سياسة الخصوصية", href: "#" },
-  { label: "الشروط والأحكام", href: "#" },
-  { label: "ضمان الاسترجاع", href: "#" },
+  { label: "سياسة الخصوصية", href: "/privacy" },
+  { label: "الشروط والأحكام", href: "/terms" },
 ];
 
 export function Footer() {
@@ -80,38 +56,12 @@ export function Footer() {
                 <span className="text-[11px] font-normal text-white/40">(دعم واتساب 24/7)</span>
               </a>
 
-              <a
-                href="mailto:support@blackgaming.store"
-                className="flex items-center gap-2.5 text-white/50 transition-colors hover:text-white"
-              >
-                <Mail size={15} className="text-white/30" />
-                support@blackgaming.store
-              </a>
-
               <div className="flex items-center gap-2.5 text-white/40">
                 <MapPin size={15} className="text-white/30" />
                 خدمة عملاء مصر والشرق الأوسط (MENA)
               </div>
             </div>
 
-            <div className="mt-6 flex items-center gap-2">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target={social.href.startsWith("http") ? "_blank" : undefined}
-                    rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    aria-label={social.label}
-                    className="grid h-9 w-9 place-items-center rounded-lg border border-white/[0.07] text-white/40 transition-colors duration-200 hover:border-emerald-500/30 hover:text-emerald-400"
-                  >
-                    <Icon size={16} />
-                  </a>
-                );
-              })}
-            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-7">
@@ -163,6 +113,14 @@ export function Footer() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href="/admin"
+                className="text-xs text-white/20 transition-colors duration-200 hover:text-white/50"
+              >
+                دخول لوحة القيادة
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
