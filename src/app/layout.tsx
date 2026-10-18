@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
+import { PWARegister } from "@/components/pwa-register";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -18,13 +19,15 @@ export const metadata: Metadata = {
     template: "%s | BLACK GAMING",
   },
   description:
-    "منصة عربية موثوقة لشحن الألعاب والبطاقات الرقمية بأسعار تنافسية، تسليم فوري، ودعم فني على مدار الساعة.",
+    "منصة عربية موثوقة لشحن الألعاب والبطاقات الرقمية بأسعار تنافسية، تسليم فوري، ودعم فني على مدار الساعة بالجنيه المصري.",
   applicationName: "BLACK GAMING",
+  manifest: "/manifest.webmanifest",
   keywords: [
     "شحن ألعاب",
-    "شحن ببجي",
-    "شحن فري فاير",
-    "بطاقات رقمية",
+    "شحن بلود سترايك",
+    "شحن Blood Strike",
+    "فودافون كاش",
+    "إنستاباي",
     "BLACK GAMING",
   ],
   openGraph: {
@@ -39,14 +42,29 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "BLACK GAMING",
+  },
   icons: {
-    icon: "/icon.svg",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
 export const viewport: Viewport = {
   themeColor: "#0B0F19",
   colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -63,6 +81,7 @@ export default function RootLayout({
         >
           تجاوز إلى المحتوى
         </a>
+        <PWARegister />
         {children}
       </body>
     </html>

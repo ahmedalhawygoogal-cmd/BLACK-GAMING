@@ -1,0 +1,38 @@
+import type { MetadataRoute } from "next";
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    id: "/",
+    name: "BLACK GAMING",
+    short_name: "BLACK GAMING",
+    description: "منصة شحن ألعاب وبطاقات رقمية فورية بالجنيه المصري.",
+    start_url: "/",
+    scope: "/",
+    display: "standalone",
+    background_color: "#0B0F19",
+    theme_color: "#0B0F19",
+    lang: "ar",
+    dir: "rtl",
+    orientation: "portrait-primary",
+    icons: [
+      {
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-maskable-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
+    ],
+  };
+}

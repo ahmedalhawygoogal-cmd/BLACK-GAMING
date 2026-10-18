@@ -1,15 +1,35 @@
 import { ArrowLeft, Gamepad2 } from "lucide-react";
 import Link from "next/link";
 import { Reveal } from "./reveal";
+import { PlatformStats } from "@/lib/supabase";
 
-const stats = [
-  { value: "+40", label: "لعبة مدعومة" },
-  { value: "24/7", label: "دعم فني" },
-  { value: "+250K", label: "عملية شحن" },
-  { value: "100%", label: "دفع آمن" },
-];
+interface HeroProps {
+  stats?: PlatformStats;
+}
 
-export function Hero() {
+export function Hero({ stats }: HeroProps) {
+  const activeGames = stats?.activeGamesCount ?? 1;
+  const completedOrders = stats?.completedOrdersCount ?? 0;
+
+  const displayStats = [
+    {
+      value: `${activeGames}`,
+      label: activeGames === 1 ? "لعبة نشطة (Blood Strike)" : "ألعاب مفعّلة للشحن",
+    },
+    {
+      value: completedOrders > 0 ? `${completedOrders}` : "تسليم فوري",
+      label: completedOrders > 0 ? "عملية شحن ناجحة" : "شحن معتمد بالـ ID",
+    },
+    {
+      value: "24/7",
+      label: "دعم فني عبر واتساب",
+    },
+    {
+      value: "100%",
+      label: "دفع مصري مباشر",
+    },
+  ];
+
   return (
     <section id="home" className="relative isolate overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
@@ -42,7 +62,7 @@ export function Hero() {
 
           <Reveal delay={0.12}>
             <p className="mx-auto mt-6 max-w-xl text-pretty text-[15px] leading-8 text-white/50 sm:text-base">
-              الرصيد، البطاقات، وشحنات الألعاب في مكان واحد. أسعار تنافسية،
+              الرصيد، البطاقات، وشحنات الألعاب في مكان واحد. أسعار تنافسية بالجنيه المصري،
               تسليم لحظي، وتجربة شراء مصممة خصيصاً للاعب العربي.
             </p>
           </Reveal>
@@ -72,14 +92,14 @@ export function Hero() {
 
         <Reveal delay={0.24}>
           <dl className="mx-auto mt-16 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-8 border-t border-white/[0.06] pt-8 sm:mt-20 sm:grid-cols-4">
-            {stats.map((stat) => (
+            {displayStats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <dt className="sr-only">{stat.label}</dt>
                 <dd>
                   <span className="block text-2xl font-extrabold text-white sm:text-[28px]">
                     {stat.value}
                   </span>
-                  <span className="mt-2 block text-[11px] font-medium text-white/35 sm:text-xs">
+                  <span className="mt-2 block text-[11px] font-medium text-white/45 sm:text-xs">
                     {stat.label}
                   </span>
                 </dd>

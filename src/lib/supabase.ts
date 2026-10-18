@@ -411,3 +411,42 @@ export async function createOrder(
   }
   return { success: true, orderCode: fallbackCode };
 }
+
+export type PlatformStats = {
+  activeGamesCount: number;
+  completedOrdersCount: number;
+};
+
+/**
+ * Fetch honest real-time statistics from Supabase database
+ */
+export async function fetchPlatformStats(): Promise<PlatformStats> {
+  let activeGamesCount = 1;
+  let completedOrdersCount = 0;
+
+  if (supabase) {
+    try {
+      const [gamesRes, ordersRes] = await Promise.all([
+        supabase
+          .from("games")
+          .select("*", { count: "exact", head: true })
+          .eq("is_active", true),
+        supabase
+          .from("orders")
+          .select("*", { count: "exact", head: true })
+          .eq("status", "completed"),
+      ]);
+
+      if (gamesRes.count !== null && gamesRes.count !== undefined) {
+        activeGamesCount = gamesRes.count;
+      }
+      if (ordersRes.count !== null && ordersRes.count !== undefined) {
+        completedOrdersCount = ordersRes.count;
+      }
+    } catch (err: unknown) {
+      console.warn("fetchPlatformStats error:", err);
+    }
+  }
+
+  return { activeGamesCount, completedOrdersCount };
+}
