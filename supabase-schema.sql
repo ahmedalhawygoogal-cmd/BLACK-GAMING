@@ -158,3 +158,40 @@ VALUES
     ('e7c2f6d8-4b2a-431e-9134-8b6c0e2a1f9d', 'باتل باس نخبة عادي', 'battle_pass', 0, 200.00, 'EGP', false, 'Elite Pass', 8),
     ('e7c2f6d8-4b2a-431e-9134-8b6c0e2a1f9d', 'باتل باس نخبة مميز', 'battle_pass', 0, 400.00, 'EGP', true, 'Premium Elite', 9)
 ON CONFLICT DO NOTHING;
+
+-- ==============================================================================
+-- 7. Phase 5: Admin Games Management
+-- Public bucket for game cover images + insert access for the games catalog.
+-- ==============================================================================
+
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+    'game-images',
+    'game-images',
+    true,
+    5242880, -- 5 MB
+    ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/avif']
+)
+ON CONFLICT (id) DO UPDATE SET
+    public = true,
+    file_size_limit = 5242880,
+    allowed_mime_types = ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
+
+-- Allow uploading and reading game covers from the public bucket
+DROP POLICY IF EXISTS "Allow public upload to game-images" ON storage.objects;
+CREATE POLICY "Allow public upload to game-images"
+ON storage.objects FOR INSERT
+WITH CHECK (bucket_id = 'game-images');
+
+DROP POLICY IF EXISTS "Allow public read from game-images" ON storage.objects;
+CREATE POLICY "Allow public read from game-images"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'game-images');
+
+-- Allow the admin dashboard to insert new games via the anon client.
+-- Note: for production, move these writes behind a server route using the
+-- service role key so inserts cannot be triggered by the public anon key.
+DROP POLICY IF EXISTS "Allow admin inserts to games" ON public.games;
+CREATE POLICY "Allow admin inserts to games"
+ON public.games FOR INSERT
+WITH CHECK (true);
