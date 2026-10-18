@@ -8,7 +8,6 @@ const footerColumns = [
     title: "المنصة",
     links: [
       { label: "عن BLACK GAMING", href: "/#home" },
-      { label: "مميزاتنا", href: "/#features" },
       { label: "ضمان وأمان الشحن", href: "/#features" },
     ],
   },

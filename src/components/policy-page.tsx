@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { Navbar } from "./navbar";
 import { Footer } from "./footer";
 
@@ -21,7 +23,14 @@ export function PolicyPage({ title, subtitle, children }: PolicyPageProps) {
 
         <div className="container-page py-16 sm:py-20 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.03] px-4 py-1.5 text-[11px] font-medium text-white/55 sm:text-xs">
+            <Link
+              href="/"
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.03] px-4 text-[12px] font-semibold text-white/65 transition-colors duration-200 hover:border-white/20 hover:text-white"
+            >
+              <ArrowRight size={14} />
+              العودة للرئيسية
+            </Link>
+            <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.03] px-4 py-1.5 text-[11px] font-medium text-white/55 sm:text-xs">
               <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan/80" />
               BLACK GAMING
             </span>

@@ -13,10 +13,11 @@ import {
   ImagePlus,
   Loader2,
   Plus,
+  Trash2,
   UploadCloud,
   X,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { deactivateGameAction, supabase } from "@/lib/supabase";
 import type { AdminGame } from "@/lib/admin-types";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -82,6 +83,34 @@ export function GamesManager({
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  async function handleDelete(game: AdminGame) {
+    const confirmed = window.confirm(
+      `هل أنت متأكد من حذف «${game.name}»؟ سيتم إخفاؤها من المتجر وتبقى محفوظة في قاعدة البيانات.`,
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingId(game.id);
+    setError(null);
+    setSuccessMessage(null);
+
+    const result = await deactivateGameAction(game.id);
+
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setGames((current) =>
+        current.map((g) => (g.id === game.id ? { ...g, is_active: false } : g)),
+      );
+      setSuccessMessage(`تم حذف «${game.name}» من المتجر بنجاح.`);
+      router.refresh();
+    }
+
+    setDeletingId(null);
+  }
 
   useEffect(() => {
     setGames(initialGames);
@@ -356,6 +385,9 @@ export function GamesManager({
                     <th scope="col" className="px-4 py-3.5 font-medium">
                       تاريخ الإضافة
                     </th>
+                    <th scope="col" className="px-4 py-3.5 font-medium">
+                      <span className="sr-only">إجراءات</span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -397,6 +429,22 @@ export function GamesManager({
                           {formatDate(game.created_at)}
                         </span>
                       </td>
+                      <td className="whitespace-nowrap px-4 py-3.5">
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(game)}
+                          disabled={deletingId !== null}
+                          aria-label={`حذف ${game.name}`}
+                          className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/[0.08] px-3 text-[11px] font-semibold text-red-300 transition-colors hover:border-red-500/50 hover:bg-red-500/[0.15] disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {deletingId === game.id ? (
+                            <Loader2 size={12} className="animate-spin" />
+                          ) : (
+                            <Trash2 size={12} />
+                          )}
+                          حذف
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -423,6 +471,19 @@ export function GamesManager({
                         <span className="h-0.5 w-0.5 rounded-full bg-white/20" />
                         <span>{formatDate(game.created_at)}</span>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(game)}
+                        disabled={deletingId !== null}
+                        className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/[0.08] px-3 text-[11px] font-semibold text-red-300 transition-colors hover:border-red-500/50 hover:bg-red-500/[0.15] disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {deletingId === game.id ? (
+                          <Loader2 size={12} className="animate-spin" />
+                        ) : (
+                          <Trash2 size={12} />
+                        )}
+                        حذف
+                      </button>
                     </div>
                   </div>
                 </li>

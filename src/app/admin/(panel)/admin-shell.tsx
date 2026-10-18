@@ -13,6 +13,7 @@ import {
   LogOut,
   Menu,
   Settings,
+  Store,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -117,17 +118,27 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           </ul>
         </nav>
 
-        <div className="mt-6 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
-          <div className="flex items-center gap-2 text-[11px] font-medium text-white/50">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/50" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            </span>
-            المتجر متصل
+        <div className="mt-6 space-y-3">
+          <Link
+            href="/"
+            onClick={onNavigate}
+            className="flex h-10 items-center gap-2.5 rounded-lg border border-accent-purple/30 bg-accent-purple/10 px-3 text-[13px] font-bold text-white transition-colors duration-200 hover:border-accent-purple/50 hover:bg-accent-purple/20"
+          >
+            <Store size={16} strokeWidth={1.8} className="text-accent-purple" />
+            العودة للمتجر
+          </Link>
+          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+            <div className="flex items-center gap-2 text-[11px] font-medium text-white/50">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/50" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              </span>
+              المتجر متصل
+            </div>
+            <p className="mt-1.5 text-[10px] leading-5 text-white/25">
+              آخر مزامنة تلقائية مع قاعدة البيانات
+            </p>
           </div>
-          <p className="mt-1.5 text-[10px] leading-5 text-white/25">
-            آخر مزامنة تلقائية مع قاعدة البيانات
-          </p>
         </div>
       </div>
 

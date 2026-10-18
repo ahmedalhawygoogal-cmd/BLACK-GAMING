@@ -11,7 +11,6 @@ import { WHATSAPP_PHONE_NUMBER } from "@/lib/supabase";
 const navLinks = [
   { label: "الرئيسية", href: "/" },
   { label: "شحن Blood Strike", href: "/game/blood-strike" },
-  { label: "مميزاتنا", href: "/#features" },
   { label: "الدعم عبر واتساب", href: `https://wa.me/${WHATSAPP_PHONE_NUMBER}`, isExternal: true },
 ];
 

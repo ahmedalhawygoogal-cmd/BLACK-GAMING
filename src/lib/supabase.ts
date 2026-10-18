@@ -412,6 +412,50 @@ export async function createOrder(
   return { success: true, orderCode: fallbackCode };
 }
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export type DeactivateGameState = {
+  error: string | null;
+};
+
+/**
+ * Hide a game from the storefront (is_active = false) using the service-role
+ * key. Runs server-side only; the anon key has no UPDATE policy on games.
+ */
+export async function deactivateGameAction(
+  gameId: string,
+): Promise<DeactivateGameState> {
+  if (!UUID_PATTERN.test(gameId)) {
+    return { error: "معرّف اللعبة غير صالح." };
+  }
+
+  const url =
+    process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !serviceRoleKey) {
+    return {
+      error:
+        "تعذر حذف اللعبة: صلاحيات الإدارة غير مهيأة على السيرفر (SERVICE_ROLE).",
+    };
+  }
+
+  const adminClient = createClient(url, serviceRoleKey, {
+    auth: { persistSession: false },
+  });
+
+  const { error } = await adminClient
+    .from("games")
+    .update({ is_active: false })
+    .eq("id", gameId);
+
+  if (error) {
+    return { error: `تعذر حذف اللعبة: ${error.message}` };
+  }
+
+  return { error: null };
+}
+
 export type PlatformStats = {
   activeGamesCount: number;
   completedOrdersCount: number;
