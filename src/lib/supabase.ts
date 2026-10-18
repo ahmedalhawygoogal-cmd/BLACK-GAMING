@@ -50,10 +50,101 @@ export type OrderRecord = {
   contact_phone?: string;
   total_amount: number;
   currency: string;
-  payment_method?: string;
-  status?: string;
+  payment_method: string;
+  transaction_id?: string;
+  receipt_url?: string;
+  status?: "pending" | "pending_verification" | "processing" | "completed" | "cancelled" | string;
   notes?: string;
 };
+
+export type PaymentMethod = {
+  id: string;
+  name: string;
+  nameEn: string;
+  provider: string;
+  walletNumber: string;
+  accountName?: string;
+  instructions: string;
+  officialAppUrl: string;
+  badgeColor: string;
+  accentBg: string;
+  borderColor: string;
+  logoText: string;
+};
+
+// Supported Egyptian Fiat Payment Methods (No crypto)
+export const PAYMENT_METHODS: PaymentMethod[] = [
+  {
+    id: "vodafone_cash",
+    name: "فودافون كاش",
+    nameEn: "Vodafone Cash",
+    provider: "Vodafone Egypt",
+    walletNumber: "01554893945",
+    accountName: "BLACK GAMING",
+    instructions: "قم بالتحويل عبر كود *9*7*الرقم*المبلغ# أو عبر تطبيق Ana Vodafone",
+    officialAppUrl: "https://web.vodafone.com.eg/ar/vodafone-cash",
+    badgeColor: "text-red-400 border-red-500/30 bg-red-500/10",
+    accentBg: "bg-red-500",
+    borderColor: "border-red-500/40 hover:border-red-500",
+    logoText: "VF",
+  },
+  {
+    id: "instapay",
+    name: "إنستاباي (InstaPay)",
+    nameEn: "InstaPay",
+    provider: "Egyptian Banks Network (EBC)",
+    walletNumber: "01554893945@instapay",
+    accountName: "BLACK GAMING",
+    instructions: "افتح تطبيق InstaPay وقم بإرسال المبلغ إلى عنوان الدفع (IPA) أو رقم الهاتف أعلاه",
+    officialAppUrl: "https://www.instapay.eg/",
+    badgeColor: "text-purple-400 border-purple-500/30 bg-purple-500/10",
+    accentBg: "bg-purple-600",
+    borderColor: "border-purple-500/40 hover:border-purple-500",
+    logoText: "IP",
+  },
+  {
+    id: "etisalat_cash",
+    name: "اتصالات كاش",
+    nameEn: "Etisalat Cash",
+    provider: "e& Egypt (Etisalat)",
+    walletNumber: "01554893945",
+    accountName: "BLACK GAMING",
+    instructions: "قم بالتحويل عبر كود *777# أو من خلال تطبيق My Etisalat",
+    officialAppUrl: "https://www.etisalat.eg/",
+    badgeColor: "text-lime-400 border-lime-500/30 bg-lime-500/10",
+    accentBg: "bg-lime-600",
+    borderColor: "border-lime-500/40 hover:border-lime-500",
+    logoText: "ET",
+  },
+  {
+    id: "orange_cash",
+    name: "أورنج كاش",
+    nameEn: "Orange Cash",
+    provider: "Orange Egypt",
+    walletNumber: "01554893945",
+    accountName: "BLACK GAMING",
+    instructions: "قم بالتحويل عبر كود #115# أو من خلال تطبيق Orange Cash",
+    officialAppUrl: "https://www.orange.eg/ar/orange-cash",
+    badgeColor: "text-orange-400 border-orange-500/30 bg-orange-500/10",
+    accentBg: "bg-orange-500",
+    borderColor: "border-orange-500/40 hover:border-orange-500",
+    logoText: "OR",
+  },
+  {
+    id: "we_pay",
+    name: "وي باي (WE Pay)",
+    nameEn: "WE Pay",
+    provider: "Telecom Egypt (WE)",
+    walletNumber: "01554893945",
+    accountName: "BLACK GAMING",
+    instructions: "قم بالتحويل من محفظتك عبر تطبيق WE Pay إلى رقم المحفظة أعلاه",
+    officialAppUrl: "https://te.eg/wps/portal/te/Personal/Personal-Services/WePay",
+    badgeColor: "text-violet-400 border-violet-500/30 bg-violet-500/10",
+    accentBg: "bg-violet-700",
+    borderColor: "border-violet-500/40 hover:border-violet-500",
+    logoText: "WE",
+  },
+];
 
 // Default fallback data for Blood Strike (MENA) matching exact requirements
 export const BLOOD_STRIKE_GAME: Game = {
@@ -167,20 +258,26 @@ export function generateWhatsAppOrderUrl(params: {
   playerId: string;
   playerName?: string;
   orderCode?: string;
+  paymentMethod?: string;
+  transactionId?: string;
+  receiptUrl?: string;
 }) {
   const currencyStr = params.currency === "EGP" ? "جنيه مصري" : (params.currency || "جنيه مصري");
   const idText = params.playerId.trim() ? params.playerId.trim() : "غير محدد بعد";
   const nameText = params.playerName?.trim() ? `\n👤 اسم الحساب: ${params.playerName.trim()}` : "";
   const codeText = params.orderCode ? `\n🔖 كود الطلب: ${params.orderCode}` : "";
+  const methodText = params.paymentMethod ? `\n💳 طريقة الدفع: ${params.paymentMethod}` : "";
+  const txText = params.transactionId ? `\n🔢 رقم العملية المرجعي: ${params.transactionId}` : "";
+  const receiptText = params.receiptUrl ? `\n📸 رابط إثبات التحويل: ${params.receiptUrl}` : "";
 
   const text = `مرحباً BLACK GAMING 👋
-أريد شحن لعبة: Blood Strike (MENA)
+تم إرسال طلب شحن وإثبات الدفع للعبة: Blood Strike (MENA)
 ${codeText}
 📦 الباقة: ${params.productName}
-💰 السعر: ${params.price} ${currencyStr}
-🎯 الآيدي (Player ID): ${idText}${nameText}
+💰 المبلغ: ${params.price} ${currencyStr}
+🎯 معرف اللاعب (Player ID): ${idText}${nameText}${methodText}${txText}${receiptText}
 
-أرجو تزويدي بطرق الدفع المتاحة وتأكيد تنفيذ الطلب فوراً 🙏`;
+أرجو مراجعة الإثبات وتأكيد الشحن إلى حسابي فوراً 🙏`;
 
   return `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(text)}`;
 }
@@ -225,24 +322,92 @@ export async function fetchBloodStrikeProducts(): Promise<Product[]> {
   return BLOOD_STRIKE_PRODUCTS;
 }
 
-export async function createOrder(order: OrderRecord): Promise<{ success: boolean; orderCode?: string }> {
+/**
+ * Upload receipt image to Supabase Storage in 'receipts' bucket
+ */
+export async function uploadReceiptImage(file: File): Promise<{ url: string | null; error: string | null }> {
+  if (!supabase) {
+    return { url: null, error: "قاعدة البيانات غير متصلة، يرجى المحاولة لاحقاً" };
+  }
+
+  try {
+    const fileExt = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const cleanFileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+    const filePath = `receipts/${cleanFileName}`;
+
+    const mimeMap: Record<string, string> = {
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+      webp: "image/webp",
+    };
+    const contentType = file.type || mimeMap[fileExt] || "image/jpeg";
+
+    const { error: uploadError } = await supabase.storage
+      .from("receipts")
+      .upload(filePath, file, {
+        contentType,
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error("Storage upload error:", uploadError);
+      return { url: null, error: uploadError.message };
+    }
+
+    const { data: publicData } = supabase.storage
+      .from("receipts")
+      .getPublicUrl(filePath);
+
+    return { url: publicData.publicUrl, error: null };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "فشل في رفع صورة الإيصال";
+    return { url: null, error: message };
+  }
+}
+
+/**
+ * Insert new order record in 'orders' table
+ */
+export async function createOrder(
+  order: OrderRecord
+): Promise<{ success: boolean; orderCode?: string; orderId?: string; error?: string }> {
+  // Generate fallback client-side order code in case DB is offline
+  const fallbackCode = `BG-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+
   if (supabase) {
     try {
       const { data, error } = await supabase
         .from("orders")
-        .insert([order])
-        .select("order_code")
+        .insert([
+          {
+            game_id: order.game_id,
+            product_id: order.product_id,
+            player_id: order.player_id,
+            player_name: order.player_name || null,
+            total_amount: order.total_amount,
+            currency: order.currency || "EGP",
+            payment_method: order.payment_method,
+            transaction_id: order.transaction_id || null,
+            receipt_url: order.receipt_url || null,
+            status: order.status || "pending_verification",
+            notes: order.notes || null,
+          },
+        ])
+        .select("id, order_code")
         .single();
 
       if (!error && data) {
-        return { success: true, orderCode: data.order_code };
+        return { success: true, orderCode: data.order_code, orderId: data.id };
       }
       if (error) {
         console.warn("Supabase insert order error:", error.message);
+        return { success: true, orderCode: fallbackCode, error: error.message };
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Supabase insert order catch:", err);
     }
   }
-  return { success: true };
+  return { success: true, orderCode: fallbackCode };
 }

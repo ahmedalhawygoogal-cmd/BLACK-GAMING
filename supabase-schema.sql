@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- BLACK GAMING - Supabase Database Schema
--- Games, Products, and Orders for Game Top-up Platform
+-- Games, Products, Orders, and Payment Receipts Storage
 -- ==============================================================================
 
 -- 1. Create Games Table
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS public.products (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 3. Create Orders Table
+-- 3. Create Orders Table with Payment Verification Fields
 CREATE TABLE IF NOT EXISTS public.orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_code TEXT UNIQUE NOT NULL DEFAULT ('BG-' || upper(substr(md5(random()::text), 1, 8))),
@@ -43,11 +43,24 @@ CREATE TABLE IF NOT EXISTS public.orders (
     contact_phone TEXT,
     total_amount NUMERIC(10, 2) NOT NULL,
     currency TEXT DEFAULT 'EGP' NOT NULL,
-    payment_method TEXT DEFAULT 'whatsapp',
-    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'cancelled')),
+    payment_method TEXT DEFAULT 'vodafone_cash',
+    transaction_id TEXT,
+    receipt_url TEXT,
+    status TEXT DEFAULT 'pending_verification' CHECK (status IN ('pending', 'pending_verification', 'processing', 'completed', 'cancelled')),
     notes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- If orders table already exists, alter columns to ensure they are present:
+ALTER TABLE public.orders 
+ADD COLUMN IF NOT EXISTS payment_method TEXT DEFAULT 'vodafone_cash',
+ADD COLUMN IF NOT EXISTS transaction_id TEXT,
+ADD COLUMN IF NOT EXISTS receipt_url TEXT;
+
+ALTER TABLE public.orders DROP CONSTRAINT IF EXISTS orders_status_check;
+ALTER TABLE public.orders 
+ADD CONSTRAINT orders_status_check 
+CHECK (status IN ('pending', 'pending_verification', 'processing', 'completed', 'cancelled'));
 
 -- ==============================================================================
 -- 4. Enable Row Level Security (RLS)
@@ -57,30 +70,61 @@ ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 
 -- Games Policies: Public read access
+DROP POLICY IF EXISTS "Allow public read access to active games" ON public.games;
 CREATE POLICY "Allow public read access to active games"
     ON public.games
     FOR SELECT
     USING (is_active = true);
 
 -- Products Policies: Public read access
+DROP POLICY IF EXISTS "Allow public read access to available products" ON public.products;
 CREATE POLICY "Allow public read access to available products"
     ON public.products
     FOR SELECT
     USING (is_available = true);
 
 -- Orders Policies: Anyone can insert an order, read by order code / ID
+DROP POLICY IF EXISTS "Allow public insert to orders" ON public.orders;
 CREATE POLICY "Allow public insert to orders"
     ON public.orders
     FOR INSERT
     WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Allow public select of own order" ON public.orders;
 CREATE POLICY "Allow public select of own order"
     ON public.orders
     FOR SELECT
     USING (true);
 
 -- ==============================================================================
--- 5. Seed Data: Blood Strike (MENA) & Product Packages
+-- 5. Create Public Storage Bucket 'receipts'
+-- ==============================================================================
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+    'receipts', 
+    'receipts', 
+    true,
+    5242880, -- 5 MB
+    ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/jpg']
+)
+ON CONFLICT (id) DO UPDATE SET 
+    public = true,
+    file_size_limit = 5242880,
+    allowed_mime_types = ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+
+-- Storage RLS Policies: Allow public upload and read for receipts
+DROP POLICY IF EXISTS "Allow public upload to receipts" ON storage.objects;
+CREATE POLICY "Allow public upload to receipts"
+ON storage.objects FOR INSERT
+WITH CHECK (bucket_id = 'receipts');
+
+DROP POLICY IF EXISTS "Allow public read from receipts" ON storage.objects;
+CREATE POLICY "Allow public read from receipts"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'receipts');
+
+-- ==============================================================================
+-- 6. Seed Data: Blood Strike (MENA) & Product Packages
 -- ==============================================================================
 
 -- Insert Blood Strike Game
@@ -112,4 +156,5 @@ VALUES
     
     -- Battle Pass Packages
     ('e7c2f6d8-4b2a-431e-9134-8b6c0e2a1f9d', 'باتل باس نخبة عادي', 'battle_pass', 0, 200.00, 'EGP', false, 'Elite Pass', 8),
-    ('e7c2f6d8-4b2a-431e-9134-8b6c0e2a1f9d', 'باتل باس نخبة مميز', 'battle_pass', 0, 400.00, 'EGP', true, 'Premium Elite', 9);
+    ('e7c2f6d8-4b2a-431e-9134-8b6c0e2a1f9d', 'باتل باس نخبة مميز', 'battle_pass', 0, 400.00, 'EGP', true, 'Premium Elite', 9)
+ON CONFLICT DO NOTHING;
