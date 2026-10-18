@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 type LogoProps = {
@@ -11,17 +12,24 @@ export function Logo({ href = "/" }: LogoProps) {
       aria-label="BLACK GAMING - الصفحة الرئيسية"
       className="group flex items-center gap-3"
     >
-      <span className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-[10px] border border-white/10 bg-gradient-to-br from-[#1a1430] to-[#0d1220] transition-colors duration-300 group-hover:border-white/20">
-        <span
-          aria-hidden
-          className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-accent-purple/70 to-transparent"
+      <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#0B0F19] shadow-[0_0_0_1px_rgba(139,92,246,0.08)] transition-colors duration-300 group-hover:border-white/20">
+        <Image
+          src="/logo-mark.png"
+          alt=""
+          width={256}
+          height={256}
+          sizes="40px"
+          priority
+          className="h-full w-full object-cover"
         />
-        <span className="text-[12px] font-extrabold leading-none tracking-wide text-white">
-          BG
-        </span>
       </span>
-      <span className="text-[13px] font-extrabold leading-none tracking-[0.18em] text-white">
-        BLACK GAMING
+      <span className="flex flex-col gap-1">
+        <span className="text-[13px] font-extrabold leading-none tracking-[0.16em] text-white">
+          BLACK GAMING
+        </span>
+        <span className="hidden text-[9px] font-medium leading-none tracking-[0.12em] text-white/30 sm:block">
+          GAME TOP-UP STORE
+        </span>
       </span>
     </Link>
   );

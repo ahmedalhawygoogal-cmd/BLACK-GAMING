@@ -14,6 +14,9 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://blackgaming.store",
+  ),
   title: {
     default: "BLACK GAMING | اشحن ألعابك المفضلة فوراً",
     template: "%s | BLACK GAMING",
@@ -30,6 +33,22 @@ export const metadata: Metadata = {
     "إنستاباي",
     "BLACK GAMING",
   ],
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/icon-192.png",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "BLACK GAMING",
+  },
   openGraph: {
     title: "BLACK GAMING | اشحن ألعابك المفضلة فوراً",
     description:
@@ -37,25 +56,25 @@ export const metadata: Metadata = {
     locale: "ar_SA",
     type: "website",
     siteName: "BLACK GAMING",
+    images: [
+      {
+        url: "/logo.png",
+        width: 800,
+        height: 800,
+        alt: "شعار BLACK GAMING",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "BLACK GAMING | اشحن ألعابك المفضلة فوراً",
+    description:
+      "منصة عربية موثوقة لشحن الألعاب والبطاقات الرقمية بأسعار تنافسية، تسليم فوري، ودعم فني على مدار الساعة.",
+    images: ["/logo.png"],
   },
   robots: {
     index: true,
     follow: true,
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "BLACK GAMING",
-  },
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
   },
 };
 

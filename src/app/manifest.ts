@@ -14,6 +14,7 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "ar",
     dir: "rtl",
     orientation: "portrait-primary",
+    categories: ["games", "shopping", "entertainment"],
     icons: [
       {
         src: "/icon-192.png",
