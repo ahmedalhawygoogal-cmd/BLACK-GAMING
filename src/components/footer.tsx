@@ -19,7 +19,7 @@ const footerColumns = [
         label: `واتساب: ${WHATSAPP_FORMATTED}`,
         href: `https://wa.me/${WHATSAPP_PHONE_NUMBER}`,
       },
-      { label: "الأسئلة الشائعة", href: "/#support" },
+      { label: "الأسئلة الشائعة", href: "/faq" },
       { label: "تواصل معنا", href: `https://wa.me/${WHATSAPP_PHONE_NUMBER}` },
     ],
   },
