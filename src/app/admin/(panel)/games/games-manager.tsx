@@ -17,7 +17,8 @@ import {
   UploadCloud,
   X,
 } from "lucide-react";
-import { deactivateGameAction, supabase } from "@/lib/supabase";
+import { deactivateGameAction } from "@/lib/admin-actions";
+import { supabase } from "@/lib/supabase";
 import type { AdminGame } from "@/lib/admin-types";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;

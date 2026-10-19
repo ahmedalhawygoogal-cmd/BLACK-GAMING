@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -25,10 +25,22 @@ export default function FaqPage() {
 
         <div className="container-page py-16 sm:py-20 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.03] px-4 py-1.5 text-[11px] font-medium text-white/55 sm:text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan/80" />
-              مركز المساعدة
-            </span>
+            <div className="mb-6 flex justify-center">
+              <Link
+                href="/"
+                className="inline-flex h-9 items-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 text-[12px] font-semibold text-white/70 shadow-sm transition-all duration-200 hover:border-white/25 hover:bg-white/[0.08] hover:text-white"
+              >
+                <ArrowRight size={14} />
+                العودة للرئيسية
+              </Link>
+            </div>
+
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.03] px-4 py-1.5 text-[11px] font-medium text-white/55 sm:text-xs">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan/80" />
+                مركز المساعدة
+              </span>
+            </div>
             <h1 className="mt-6 text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl">
               الأسئلة الشائعة
             </h1>

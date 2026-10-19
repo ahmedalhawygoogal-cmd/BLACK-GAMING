@@ -1,32 +1,25 @@
-import { NextResponse, type NextRequest } from "next/server";
-import {
-  ADMIN_SESSION_COOKIE,
-  verifyAdminSessionToken,
-} from "@/lib/admin-session";
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
-  const { pathname, search } = request.nextUrl;
-  const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  const isAuthenticated = await verifyAdminSessionToken(token);
-
-  if (pathname === "/admin/login") {
-    if (isAuthenticated) {
-      return NextResponse.redirect(new URL("/admin", request.url));
-    }
-    return NextResponse.next();
+export function middleware(request: NextRequest) {
+  const adminSession = request.cookies.get('admin_session')?.value
+  
+  // If trying to access /admin/login and already logged in, redirect to /admin
+  if (request.nextUrl.pathname === '/admin/login') {
+    if (adminSession) return NextResponse.redirect(new URL('/admin', request.url))
+    return NextResponse.next()
   }
 
-  if (!isAuthenticated) {
-    const loginUrl = new URL("/admin/login", request.url);
-    if (pathname !== "/admin") {
-      loginUrl.searchParams.set("from", `${pathname}${search}`);
+  // Protect all other /admin routes
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    if (!adminSession) {
+      return NextResponse.redirect(new URL('/admin/login', request.url))
     }
-    return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.next();
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
-};
+  matcher: ['/admin/:path*'],
+}

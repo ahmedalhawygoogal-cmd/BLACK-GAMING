@@ -23,17 +23,23 @@ export function PolicyPage({ title, subtitle, children }: PolicyPageProps) {
 
         <div className="container-page py-16 sm:py-20 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
-            <Link
-              href="/"
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.03] px-4 text-[12px] font-semibold text-white/65 transition-colors duration-200 hover:border-white/20 hover:text-white"
-            >
-              <ArrowRight size={14} />
-              العودة للرئيسية
-            </Link>
-            <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.03] px-4 py-1.5 text-[11px] font-medium text-white/55 sm:text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan/80" />
-              BLACK GAMING
-            </span>
+            <div className="mb-6 flex justify-center">
+              <Link
+                href="/"
+                className="inline-flex h-9 items-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 text-[12px] font-semibold text-white/70 shadow-sm transition-all duration-200 hover:border-white/25 hover:bg-white/[0.06] hover:text-white"
+              >
+                <ArrowRight size={14} />
+                العودة للرئيسية
+              </Link>
+            </div>
+
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.03] px-4 py-1.5 text-[11px] font-medium text-white/55 sm:text-xs">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan/80" />
+                BLACK GAMING
+              </span>
+            </div>
+
             <h1 className="mt-6 text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl">
               {title}
             </h1>

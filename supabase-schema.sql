@@ -195,3 +195,11 @@ DROP POLICY IF EXISTS "Allow admin inserts to games" ON public.games;
 CREATE POLICY "Allow admin inserts to games"
 ON public.games FOR INSERT
 WITH CHECK (true);
+
+-- Allow updating games (e.g. marking is_active = false on delete/deactivate)
+DROP POLICY IF EXISTS "Allow update to games" ON public.games;
+CREATE POLICY "Allow update to games"
+ON public.games FOR UPDATE
+USING (true)
+WITH CHECK (true);
+

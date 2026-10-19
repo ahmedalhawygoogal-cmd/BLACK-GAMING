@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
+  ArrowLeft,
   ClipboardList,
   Gamepad2,
   LayoutDashboard,
@@ -72,7 +73,21 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         </Link>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-6">
+      <div className="flex-1 overflow-y-auto px-4 py-5">
+        <div className="mb-5">
+          <Link
+            href="/"
+            onClick={onNavigate}
+            className="group flex items-center justify-between gap-3 rounded-xl border border-accent-purple/35 bg-gradient-to-r from-accent-purple/20 via-accent-purple/10 to-accent-cyan/10 px-3.5 py-3 text-[13px] font-bold text-white shadow-sm transition-all duration-200 hover:border-accent-purple/60 hover:from-accent-purple/30 hover:to-accent-cyan/20"
+          >
+            <span className="flex items-center gap-2.5">
+              <Store size={18} strokeWidth={2} className="text-accent-cyan transition-transform group-hover:scale-110" />
+              العودة للمتجر
+            </span>
+            <ArrowLeft size={15} className="text-white/40 transition-transform group-hover:-translate-x-1 group-hover:text-white" />
+          </Link>
+        </div>
+
         <p className="px-3 text-[10px] font-semibold tracking-[0.16em] text-white/25">
           إدارة المتجر
         </p>
@@ -118,15 +133,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           </ul>
         </nav>
 
-        <div className="mt-6 space-y-3">
-          <Link
-            href="/"
-            onClick={onNavigate}
-            className="flex h-10 items-center gap-2.5 rounded-lg border border-accent-purple/30 bg-accent-purple/10 px-3 text-[13px] font-bold text-white transition-colors duration-200 hover:border-accent-purple/50 hover:bg-accent-purple/20"
-          >
-            <Store size={16} strokeWidth={1.8} className="text-accent-purple" />
-            العودة للمتجر
-          </Link>
+        <div className="mt-6">
           <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
             <div className="flex items-center gap-2 text-[11px] font-medium text-white/50">
               <span className="relative flex h-1.5 w-1.5">
@@ -245,15 +252,24 @@ export function AdminShell({ children }: { children: ReactNode }) {
             </span>
           </Link>
 
-          <button
-            type="button"
-            onClick={() => setIsDrawerOpen(true)}
-            aria-label="فتح القائمة"
-            aria-expanded={isDrawerOpen}
-            className="grid h-9 w-9 place-items-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 transition-colors hover:text-white"
-          >
-            <Menu size={17} />
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/"
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.03] px-3 text-[11px] font-semibold text-white/75 transition-colors hover:border-white/20 hover:text-white"
+            >
+              <Store size={14} className="text-accent-cyan" />
+              المتجر
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsDrawerOpen(true)}
+              aria-label="فتح القائمة"
+              aria-expanded={isDrawerOpen}
+              className="grid h-9 w-9 place-items-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 transition-colors hover:text-white"
+            >
+              <Menu size={17} />
+            </button>
+          </div>
         </header>
 
         <main className="relative flex-1">

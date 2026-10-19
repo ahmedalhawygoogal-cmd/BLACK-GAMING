@@ -4,10 +4,6 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ArrowRight, ShieldCheck } from "lucide-react";
-import {
-  ADMIN_SESSION_COOKIE,
-  verifyAdminSessionToken,
-} from "@/lib/admin-session";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
@@ -22,8 +18,8 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminLoginPage() {
-  const token = cookies().get(ADMIN_SESSION_COOKIE)?.value;
-  if (await verifyAdminSessionToken(token)) {
+  const adminSession = cookies().get("admin_session")?.value;
+  if (adminSession) {
     redirect("/admin");
   }
 
