@@ -6,23 +6,33 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "./logo";
 import { PWAInstallButton } from "./pwa-install-button";
-import { WHATSAPP_PHONE_NUMBER } from "@/lib/supabase";
+import {
+  getGameHref,
+  WHATSAPP_PHONE_NUMBER,
+  type CatalogGame,
+} from "@/lib/supabase";
 
-const navLinks = [
-  { label: "الرئيسية", href: "/" },
-  { label: "شحن Blood Strike", href: "/game/blood-strike" },
-  { label: "الأسئلة الشائعة", href: "/faq" },
-  {
-    label: "الدعم عبر واتساب",
-    href: `https://wa.me/${WHATSAPP_PHONE_NUMBER}`,
-    isExternal: true,
-  },
-];
-
-export function Navbar() {
+export function Navbar({
+  primaryGame = null,
+}: {
+  primaryGame?: CatalogGame | null;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const primaryHref = primaryGame ? getGameHref(primaryGame.slug) : "/#games";
+  const navLinks: Array<{ label: string; href: string; isExternal?: boolean }> = [
+    { label: "الرئيسية", href: "/" },
+    ...(primaryGame
+      ? [{ label: `شحن ${primaryGame.name}`, href: primaryHref }]
+      : []),
+    { label: "الأسئلة الشائعة", href: "/faq" },
+    {
+      label: "الدعم عبر واتساب",
+      href: `https://wa.me/${WHATSAPP_PHONE_NUMBER}`,
+      isExternal: true,
+    },
+  ];
 
   useEffect(() => {
     let ticking = false;
@@ -104,13 +114,15 @@ export function Navbar() {
             <PWAInstallButton />
           </div>
 
-          <Link
-            href="/game/blood-strike"
-            className="hidden h-10 items-center justify-center gap-1.5 rounded-lg bg-accent-purple px-5 text-[13px] font-semibold text-white shadow-cta transition-transform duration-150 active:scale-95 hover:bg-[#7c4df2] sm:inline-flex"
-          >
-            <Zap size={15} />
-            <span>اشحن الآن</span>
-          </Link>
+          {primaryGame ? (
+            <Link
+              href={primaryHref}
+              className="hidden h-10 items-center justify-center gap-1.5 rounded-lg bg-accent-purple px-5 text-[13px] font-semibold text-white shadow-cta transition-transform duration-150 active:scale-95 hover:bg-[#7c4df2] sm:inline-flex"
+            >
+              <Zap size={15} />
+              <span>اشحن الآن</span>
+            </Link>
+          ) : null}
 
           <button
             type="button"
@@ -164,14 +176,16 @@ export function Navbar() {
               <PWAInstallButton className="w-full flex items-center justify-center gap-2 rounded-lg border border-accent-cyan/30 bg-accent-cyan/10 py-2.5 text-xs font-semibold text-accent-cyan hover:bg-accent-cyan/20 transition-all" />
             </div>
 
-            <Link
-              href="/game/blood-strike"
-              onClick={() => setIsOpen(false)}
-              className="mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-accent-purple text-sm font-semibold text-white transition-all active:scale-95 hover:bg-[#7c4df2]"
-            >
-              <Zap size={16} />
-              <span>اشحن الآن (Blood Strike)</span>
-            </Link>
+            {primaryGame ? (
+              <Link
+                href={primaryHref}
+                onClick={() => setIsOpen(false)}
+                className="mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-accent-purple text-sm font-semibold text-white transition-all active:scale-95 hover:bg-[#7c4df2]"
+              >
+                <Zap size={16} />
+                <span>اشحن الآن ({primaryGame.name})</span>
+              </Link>
+            ) : null}
           </nav>
         </div>
       )}

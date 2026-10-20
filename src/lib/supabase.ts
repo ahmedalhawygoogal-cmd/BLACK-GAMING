@@ -38,7 +38,24 @@ export type Game = {
   region: string;
   description: string;
   icon?: string;
+  banner_url?: string | null;
+  is_active?: boolean | null;
 };
+
+export type CatalogGame = {
+  id: string;
+  slug: string;
+  name: string;
+  region: string | null;
+  description: string | null;
+  icon: string | null;
+  banner_url: string | null;
+  is_active: boolean | null;
+};
+
+export function getGameHref(slug: string): string {
+  return `/game/${slug}`;
+}
 
 export type OrderRecord = {
   id?: string;
@@ -282,6 +299,54 @@ ${codeText}
   return `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
+export async function fetchActiveGames(): Promise<CatalogGame[]> {
+  if (!supabase) {
+    return [];
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("games")
+      .select("id, slug, name, region, description, icon, banner_url, is_active")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.warn("Supabase fetch active games error:", error.message);
+      return [];
+    }
+
+    return (data ?? []) as CatalogGame[];
+  } catch (err) {
+    console.warn("Supabase fetch active games catch:", err);
+    return [];
+  }
+}
+
+export async function fetchProductsByGameId(gameId: string): Promise<Product[]> {
+  if (!supabase) {
+    return [];
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("game_id", gameId)
+      .order("sort_order", { ascending: true });
+
+    if (error) {
+      console.warn("Supabase fetch products by game error:", error.message);
+      return [];
+    }
+
+    return (data ?? []) as Product[];
+  } catch (err) {
+    console.warn("Supabase fetch products by game catch:", err);
+    return [];
+  }
+}
+
 export async function fetchBloodStrikeGame(): Promise<Game> {
   if (supabase) {
     try {
@@ -426,7 +491,7 @@ export type PlatformStats = {
  * Fetch honest real-time statistics from Supabase database
  */
 export async function fetchPlatformStats(): Promise<PlatformStats> {
-  let activeGamesCount = 1;
+  let activeGamesCount = 0;
   let completedOrdersCount = 0;
 
   if (supabase) {
