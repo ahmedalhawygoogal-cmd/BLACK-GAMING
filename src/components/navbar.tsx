@@ -11,7 +11,12 @@ import { WHATSAPP_PHONE_NUMBER } from "@/lib/supabase";
 const navLinks = [
   { label: "الرئيسية", href: "/" },
   { label: "شحن Blood Strike", href: "/game/blood-strike" },
-  { label: "الدعم عبر واتساب", href: `https://wa.me/${WHATSAPP_PHONE_NUMBER}`, isExternal: true },
+  { label: "الأسئلة الشائعة", href: "/faq" },
+  {
+    label: "الدعم عبر واتساب",
+    href: `https://wa.me/${WHATSAPP_PHONE_NUMBER}`,
+    isExternal: true,
+  },
 ];
 
 export function Navbar() {

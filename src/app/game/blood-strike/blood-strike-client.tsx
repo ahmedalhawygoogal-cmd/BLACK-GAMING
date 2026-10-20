@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   AlertCircle,
@@ -735,11 +736,13 @@ export function BloodStrikeClient({
                     <div className="rounded-2xl border border-emerald-500/30 bg-[#090d16] p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="flex items-center gap-3 w-full sm:w-auto">
                         <div className="relative h-16 w-16 rounded-xl overflow-hidden border border-white/15 bg-black shrink-0">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
+                          <Image
                             src={receiptPreview}
-                            alt="Receipt preview"
-                            className="h-full w-full object-cover"
+                            alt="معاينة إيصال الدفع"
+                            fill
+                            unoptimized
+                            sizes="64px"
+                            className="object-cover"
                           />
                         </div>
                         <div className="min-w-0">

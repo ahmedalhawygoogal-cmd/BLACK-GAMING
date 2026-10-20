@@ -5,7 +5,6 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
   ClipboardList,
@@ -149,7 +148,21 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         </div>
       </div>
 
-      <div className="shrink-0 border-t border-white/[0.05] p-4">
+      <div className="shrink-0 space-y-2 border-t border-white/[0.05] p-4">
+        <Link
+          href="/"
+          onClick={onNavigate}
+          className="group flex h-10 w-full items-center justify-between gap-2 rounded-lg border border-accent-purple/25 bg-accent-purple/[0.08] px-3 text-[13px] font-semibold text-white transition-colors duration-200 hover:border-accent-purple/45 hover:bg-accent-purple/[0.14]"
+        >
+          <span className="flex items-center gap-2.5">
+            <Store size={16} strokeWidth={1.8} className="text-accent-purple" />
+            العودة للمتجر
+          </span>
+          <ArrowLeft
+            size={14}
+            className="text-white/35 transition-transform duration-200 group-hover:-translate-x-0.5"
+          />
+        </Link>
         <form action={logoutAction}>
           <button
             type="submit"
@@ -159,7 +172,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             تسجيل خروج
           </button>
         </form>
-        <p className="mt-2 px-3 text-[10px] text-white/15">BLACK GAMING v1.0</p>
+        <p className="px-3 text-[10px] text-white/15">BLACK GAMING v1.0</p>
       </div>
     </div>
   );
@@ -168,7 +181,6 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 export function AdminShell({ children }: { children: ReactNode }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const pathname = usePathname();
-  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     setIsDrawerOpen(false);
@@ -200,39 +212,27 @@ export function AdminShell({ children }: { children: ReactNode }) {
         <SidebarContent />
       </aside>
 
-      <AnimatePresence>
-        {isDrawerOpen ? (
-          <div key="admin-drawer" className="fixed inset-0 z-50 lg:hidden">
-            <motion.button
+      {isDrawerOpen ? (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <button
+            type="button"
+            aria-label="إغلاق القائمة"
+            onClick={() => setIsDrawerOpen(false)}
+            className="absolute inset-0 h-full w-full animate-[fade-in_0.2s_ease-out] bg-black/60 backdrop-blur-sm"
+          />
+          <aside className="absolute inset-y-0 right-0 w-[282px] animate-[admin-drawer-in_0.3s_cubic-bezier(0.22,1,0.36,1)] border-l border-white/[0.07] bg-[#080B12]">
+            <button
               type="button"
-              aria-label="إغلاق القائمة"
               onClick={() => setIsDrawerOpen(false)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="absolute inset-0 h-full w-full bg-black/60 backdrop-blur-sm"
-            />
-            <motion.aside
-              initial={shouldReduceMotion ? false : { x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-y-0 right-0 w-[282px] border-l border-white/[0.07] bg-[#080B12]"
+              aria-label="إغلاق القائمة"
+              className="absolute left-3 top-5 z-10 grid h-8 w-8 place-items-center rounded-lg border border-white/[0.08] text-white/50 transition-colors hover:text-white"
             >
-              <button
-                type="button"
-                onClick={() => setIsDrawerOpen(false)}
-                aria-label="إغلاق القائمة"
-                className="absolute left-3 top-5 z-10 grid h-8 w-8 place-items-center rounded-lg border border-white/[0.08] text-white/50 transition-colors hover:text-white"
-              >
-                <X size={15} />
-              </button>
-              <SidebarContent onNavigate={() => setIsDrawerOpen(false)} />
-            </motion.aside>
-          </div>
-        ) : null}
-      </AnimatePresence>
+              <X size={15} />
+            </button>
+            <SidebarContent onNavigate={() => setIsDrawerOpen(false)} />
+          </aside>
+        </div>
+      ) : null}
 
       <div className="flex min-h-screen flex-col lg:pr-[272px]">
         <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-3 border-b border-white/[0.06] bg-background/85 px-5 backdrop-blur-xl lg:hidden">

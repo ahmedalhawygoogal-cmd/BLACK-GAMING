@@ -8,7 +8,8 @@ const footerColumns = [
     title: "المنصة",
     links: [
       { label: "عن BLACK GAMING", href: "/#home" },
-      { label: "ضمان وأمان الشحن", href: "/#features" },
+      { label: "ضمان وأمان الشحن", href: "/terms" },
+      { label: "طريقة الشحن", href: "/faq#how-to-order" },
     ],
   },
   {
@@ -27,7 +28,7 @@ const footerColumns = [
 const policyLinks = [
   { label: "سياسة الخصوصية", href: "/privacy" },
   { label: "الشروط والأحكام", href: "/terms" },
-  { label: "الأسئلة الشائعة", href: "/faq" },
+  { label: "ضمان الاسترجاع", href: "/terms#refund" },
 ];
 
 export function Footer() {

@@ -5,7 +5,7 @@ import { Navbar } from "@/components/navbar";
 import { Trust } from "@/components/trust";
 import { fetchPlatformStats } from "@/lib/supabase";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function HomePage() {
   const stats = await fetchPlatformStats();
